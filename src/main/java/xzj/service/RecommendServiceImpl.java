@@ -12,4 +12,9 @@ public class RecommendServiceImpl implements RecommendService {
     public String getRecommend(Long productId) {
         return "推荐词";
     }
+
+    @Override
+    public String getHotWord(Long productId) {
+        return "热词";
+    }
 }

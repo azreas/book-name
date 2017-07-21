@@ -12,7 +12,6 @@ import xzj.wrapper.ProductWrapper;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +42,8 @@ public class BookNameServiceImpl implements BookNameService {
         product.setRecommend(recommendService.getRecommend(productId));
 
         List<BookNameRule> bookNameRules = product.getBookNameRules();
-        ProductWrapper productWrapper = ProductWrapper.builder(product, bookNameRules).build();
+//        ProductWrapper productWrapper = ProductWrapper.builder(product, bookNameRules).build();
+
 //        Map<String, String> bookNameMap = new HashMap<>();
 //        for (BookNameRule bookNameRule : bookNameRules) {
 //            convertTitle(product, bookNameRule.getMetadata());
@@ -52,12 +52,17 @@ public class BookNameServiceImpl implements BookNameService {
 //            bookNameMap.put(bookNameRule.getShopId().toString(), name);
 //        }
 
-        return productWrapper.getShopAndNameMap();
+        for (BookNameRule bookNameRule : bookNameRules) {
+            ProductWrapper.Builder builder = ProductWrapper.builder(product, bookNameRules);
+            ProductWrapper productWrapper = buildMetadata(builder, bookNameRule.getMetadata(), product);
+            System.out.println(productWrapper);
+        }
+//        return productWrapper.getShopAndNameMap();
+        return null;
     }
 
 
-
-//    private List<Metadata> convertTitle(Product product, List<Metadata> metadatas) {
+    //    private List<Metadata> convertTitle(Product product, List<Metadata> metadatas) {
 //        Class<?> clazz = null;
 //        Method method = null;
 //        try {
@@ -77,6 +82,27 @@ public class BookNameServiceImpl implements BookNameService {
 //        }
 //        return metadatas;
 //    }
+    private ProductWrapper buildMetadata(ProductWrapper.Builder builder, List<Metadata> metadatas, Product product) {
+        Class<?> clazz = null;
+        Method method = null;
+
+        try {
+            clazz = this.getClass();
+            for (Metadata metadata : metadatas) {
+                method = clazz.getMethod("build" + metadata.getExpression(), Product.class, ProductWrapper.Builder.class);
+//                builder
+//                metadata.setValue((String) method.invoke(product, null));
+                method.invoke(this,  product, builder);
+            }
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return builder.build();
+    }
 
     private String titlesToName(List<Metadata> metadata, BookNameRule bookNameRules) {
         Object[] values = metadata.stream().map(Metadata::getValue).toArray(String[]::new);
@@ -84,6 +110,34 @@ public class BookNameServiceImpl implements BookNameService {
         MessageFormat format = new MessageFormat(bookNameRules.getRule());
 
         return format.format(values);
+    }
+
+    public void buildTitle(Product product, ProductWrapper.Builder builder) {
+        builder.title(product.getBookName());
+    }
+
+    public void buildSubTitle(Product product, ProductWrapper.Builder builder) {
+        builder.subtitle(product.getSubtitle());
+    }
+
+    public void buildMarketingClassification(Product product, ProductWrapper.Builder builder) {
+        builder.marketingClassification(product.getMarketingClassification());
+    }
+
+    public void buildPreSale(Product product, ProductWrapper.Builder builder) {
+        builder.preSale(product.getPreSale());
+    }
+
+    public void buildArrivalTime(Product product, ProductWrapper.Builder builder) {
+        builder.arrivalTime(product.getArrivalTime());
+    }
+
+    public void buildHotWord(Product product, ProductWrapper.Builder builder) {
+        builder.hotword(recommendService.getHotWord(product.getId()));
+    }
+
+    public void buildRecommend(Product product, ProductWrapper.Builder builder) {
+        builder.recommend(recommendService.getRecommend(product.getId()));
     }
 
 }

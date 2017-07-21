@@ -18,15 +18,56 @@ import java.util.Map;
 public class ProductWrapper {
     private final Product product;
     private final List<BookNameRule> bookNameRules;
-//    private final Map<String, String> shopAndNameMap;
+    private String title;
+    private String subtitle;
+    private String marketingClassification;
+    private String preSale;
+    private String arrivalTime;
+    private String hotWord;
+    private String recommend;
 
     private ProductWrapper(Builder builder) {
         this.product = builder.product;
         this.bookNameRules = builder.bookNameRules;
+        this.title = builder.title;
+        this.subtitle = builder.subtitle;
+        this.marketingClassification = builder.marketingClassification;
+        this.preSale = builder.preSale;
+        this.arrivalTime = builder.arrivalTime;
+        this.hotWord = builder.hotWord;
+        this.recommend = builder.recommend;
     }
 
     public static Builder builder(Product product, List<BookNameRule> bookNameRules) {
         return new Builder(product, bookNameRules);
+    }
+
+    public String getRecommend() {
+        return recommend;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public String getMarketingClassification() {
+        return marketingClassification;
+    }
+
+    public String getPreSale() {
+        return preSale;
+    }
+
+    public String getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public String getHotWord() {
+        return hotWord;
     }
 
     public Map<String, String> getShopAndNameMap() {
@@ -40,29 +81,81 @@ public class ProductWrapper {
     private String getBookName(BookNameRule bookNameRule) {
         MessageFormat format = new MessageFormat(bookNameRule.getRule());
         Object[] values = bookNameRule.getMetadata().stream().map(Metadata::getValue).toArray(String[]::new);
-
-//        Object[] values = checkLength(format, 0);
         return format.format(values);
+    }
+
+    @Override
+    public String toString() {
+        return "ProductWrapper{" +
+                "product=" + product +
+                ", bookNameRules=" + bookNameRules +
+                ", title='" + title + '\'' +
+                ", subtitle='" + subtitle + '\'' +
+                ", marketingClassification='" + marketingClassification + '\'' +
+                ", preSale='" + preSale + '\'' +
+                ", arrivalTime='" + arrivalTime + '\'' +
+                ", hotWord='" + hotWord + '\'' +
+                ", recommend='" + recommend + '\'' +
+                '}';
     }
 
     public static class Builder {
         private Product product;
         private List<BookNameRule> bookNameRules;
+        private String title;
+        private String subtitle;
+        private String marketingClassification;
+        private String preSale;
+        private String arrivalTime;
+        private String hotWord;
+        private String recommend;
 
         Builder(Product product, List<BookNameRule> bookNameRules) {
             if (product == null) throw new NullPointerException("product == null");
             if (bookNameRules == null) throw new NullPointerException("bookNameRules == null");
             this.product = product;
-            for (BookNameRule bookNameRule : bookNameRules) {
-                List<Metadata> metadatas = bookNameRule.getMetadata();
-                convertTitle(product, metadatas);
-            }
+//            for (BookNameRule bookNameRule : bookNameRules) {
+//                List<Metadata> metadatas = bookNameRule.getMetadata();
+//                convertTitle(product, metadatas);
+//            }
             this.bookNameRules = bookNameRules;
         }
 
-        public void setHotWord() {
-
+        public Builder title(String title) {
+            this.title = title;
+            return this;
         }
+
+        public Builder subtitle(String subtitle) {
+            this.subtitle = subtitle;
+            return this;
+        }
+
+        public Builder marketingClassification(String marketingClassification) {
+            this.marketingClassification = marketingClassification;
+            return this;
+        }
+
+        public Builder preSale(String preSale) {
+            this.preSale = preSale;
+            return this;
+        }
+
+        public Builder arrivalTime(String arrivalTime) {
+            this.arrivalTime = arrivalTime;
+            return this;
+        }
+
+        public Builder hotword(String hotWord) {
+            this.hotWord = hotWord;
+            return this;
+        }
+
+        public Builder recommend(String recommend) {
+            this.recommend = recommend;
+            return this;
+        }
+
 
         public ProductWrapper build() {
             return new ProductWrapper(this);
@@ -89,6 +182,4 @@ public class ProductWrapper {
             return metadatas;
         }
     }
-
-
 }

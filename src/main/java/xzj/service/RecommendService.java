@@ -6,4 +6,6 @@ package xzj.service;
  */
 public interface RecommendService {
     String getRecommend(Long productId);
+
+    String getHotWord(Long productId);
 }
