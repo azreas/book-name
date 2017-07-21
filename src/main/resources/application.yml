@@ -1,0 +1,35 @@
+spring:
+  profiles:
+    active: dev
+
+server:
+  port: 8080
+
+
+logging:
+  level:
+    root: INFO
+
+
+---
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:mysql://10.100.12.62:23306/book?useUnicode=true&zeroDateTimeBehavior=convertToNull&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false
+    username: root
+    password: 123456
+    driverClassName: com.mysql.jdbc.Driver
+    initialSize: 5
+    minIdle: 5
+    maxActive: 25
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 60000
+    validationQuery: SELECT 'x'
+    testOnBorrow: true
+    testOnReturn: false
+    testWhileIdle: false
+    filters: stat
+  jpa:
+    show-sql: true
+    open-in-view: true

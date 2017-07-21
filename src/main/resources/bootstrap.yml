@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: book-name
+  profiles:
+    active: dev
