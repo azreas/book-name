@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +30,7 @@ public class BookNameRule {
     private Long shopId;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "_rule")
-    private List<Metadata> metadata = new ArrayList<>();
-    @Transient
-    private List<Metadata> new_metadata = new ArrayList<>();
+    private List<Metadata> metadatas = new ArrayList<>();
 
     public Long getShopId() {
         return shopId;
@@ -69,29 +66,13 @@ public class BookNameRule {
         this.length = length;
     }
 
-    public void addTitle(Metadata nameRule) {
-        metadata.add(nameRule);
-    }
-
-    public List<Metadata> getNameRules() {
-        return metadata;
-    }
-
-
-    public List<Metadata> getNew_metadata() {
-        return new_metadata;
-    }
-
-    public void setNew_metadata(List<Metadata> new_metadata) {
-        this.new_metadata = new_metadata;
-    }
 
     public List<Metadata> getMetadata() {
-        return metadata;
+        return metadatas;
     }
 
     public void setMetadata(List<Metadata> metadata) {
-        this.metadata = metadata;
+        this.metadatas = metadata;
     }
 
     public String getBookName() {
@@ -102,11 +83,11 @@ public class BookNameRule {
 
 
     public Object[] checkLength(MessageFormat format, int priority) {
-        Object[] values = metadata.stream().map(Metadata::getValue).toArray(String[]::new);
+        Object[] values = metadatas.stream().map(Metadata::getValue).toArray(String[]::new);
         String bookName = format.format(values);
         System.out.println(bookName.length());
         if (bookName.length() > length && priority <= 10) {//避免死循环
-            for (Metadata metadata : this.metadata) {
+            for (Metadata metadata : this.metadatas) {
                 if (metadata.getPriority() == priority) {
                     int titleLength = metadata.getValue().length();
                     if (titleLength > 4) {

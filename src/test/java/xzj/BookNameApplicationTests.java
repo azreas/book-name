@@ -22,11 +22,11 @@ public class BookNameApplicationTests {
     @Test
     public void getBookNameRule() throws Exception {
         BookNameRule bookNameRule = bookNameService.getBookNameRule(1L);
-        List<Metadata> nameRules = bookNameRule.getNameRules();
+//        List<Metadata> nameRules = bookNameRule.getNameRules();
 
-        for (Metadata nameRule : nameRules) {
-            System.out.println(nameRule);
-        }
+//        for (Metadata nameRule : nameRules) {
+//            System.out.println(nameRule);
+//        }
 //        String s = bookNameRule.lengthRule2(0);
 //        System.out.println(s);
     }

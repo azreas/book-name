@@ -44,37 +44,39 @@ public class BookNameServiceImpl implements BookNameService {
 
         List<BookNameRule> bookNameRules = product.getBookNameRules();
         ProductWrapper productWrapper = ProductWrapper.builder(product, bookNameRules).build();
-        Map<String, String> bookNameMap = new HashMap<>();
-        for (BookNameRule bookNameRule : bookNameRules) {
-            convertTitle(product, bookNameRule.getMetadata());
+//        Map<String, String> bookNameMap = new HashMap<>();
+//        for (BookNameRule bookNameRule : bookNameRules) {
+//            convertTitle(product, bookNameRule.getMetadata());
 //            String name = titlesToName(titles, bookNameRule);
-            String name = bookNameRule.getBookName();
-            bookNameMap.put(bookNameRule.getShopId().toString(), name);
-        }
+//            String name = bookNameRule.getBookName();
+//            bookNameMap.put(bookNameRule.getShopId().toString(), name);
+//        }
 
-        return bookNameMap;
+        return productWrapper.getShopAndNameMap();
     }
 
-    private List<Metadata> convertTitle(Product product, List<Metadata> metadatas) {
-        Class<?> clazz = null;
-        Method method = null;
-        try {
-            clazz = Class.forName("xzj.model.Product");
-            for (Metadata metadata : metadatas) {
-                method = clazz.getMethod(metadata.getExpression());
-                metadata.setValue((String) method.invoke(product, null));
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        return metadatas;
-    }
+
+
+//    private List<Metadata> convertTitle(Product product, List<Metadata> metadatas) {
+//        Class<?> clazz = null;
+//        Method method = null;
+//        try {
+//            clazz = Class.forName("xzj.model.Product");
+//            for (Metadata metadata : metadatas) {
+//                method = clazz.getMethod(metadata.getExpression());
+//                metadata.setValue((String) method.invoke(product, null));
+//            }
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchMethodException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//        }
+//        return metadatas;
+//    }
 
     private String titlesToName(List<Metadata> metadata, BookNameRule bookNameRules) {
         Object[] values = metadata.stream().map(Metadata::getValue).toArray(String[]::new);

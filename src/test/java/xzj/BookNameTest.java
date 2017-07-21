@@ -20,15 +20,15 @@ public class BookNameTest {
         Metadata metadata3 = new Metadata("通过营销分类得到的热词 ", 3, 0);
         Metadata metadata4 = new Metadata("通过营销分类得到的推荐", 2, 1);
         BookNameRule bookName = new BookNameRule();
-        bookName.addTitle(metadata4);
-        bookName.addTitle(metadata2);
-        bookName.addTitle(metadata3);
-        bookName.addTitle(metadata1);
-        bookName.setRule("{0}:{1}+{2}+{3}");
-        System.out.println(bookName.getBookName());
-        bookName.setLength(20);
-        Map<Integer, Metadata> map =
-                bookName.getNameRules().stream().collect(Collectors.toMap(Metadata::getPriority, title -> title));
+//        bookName.addTitle(metadata4);
+//        bookName.addTitle(metadata2);
+//        bookName.addTitle(metadata3);
+//        bookName.addTitle(metadata1);
+//        bookName.setRule("{0}:{1}+{2}+{3}");
+//        System.out.println(bookName.getBookName());
+//        bookName.setLength(20);
+//        Map<Integer, Metadata> map =
+//                bookName.getNameRules().stream().collect(Collectors.toMap(Metadata::getPriority, title -> title));
 //        Map<Integer, String> map = new HashMap<>();
 //        map.put(0, "13546545");
 //        map.put(1, "heretrtegdfg");
