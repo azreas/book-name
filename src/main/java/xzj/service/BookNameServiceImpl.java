@@ -89,7 +89,7 @@ public class BookNameServiceImpl implements BookNameService {
         try {
             clazz = Class.forName("xzj.wrapper.ProductWrapper");
             for (Metadata metadata : metadatas) {
-                method = clazz.getMethod("get" + metadata.getExpression());
+                method = clazz.getDeclaredMethod("get" + metadata.getExpression());
                 metadata.setValue((String) method.invoke(productWrapper, null));
             }
         } catch (ClassNotFoundException e) {
@@ -111,7 +111,7 @@ public class BookNameServiceImpl implements BookNameService {
         try {
             clazz = this.getClass();
             for (Metadata metadata : metadatas) {
-                method = clazz.getMethod("build" + metadata.getExpression(), Product.class, ProductWrapper.Builder.class);
+                method = clazz.getDeclaredMethod("build" + metadata.getExpression(), Product.class, ProductWrapper.Builder.class);
                 method.invoke(this, product, builder);
             }
         } catch (NoSuchMethodException e) {
