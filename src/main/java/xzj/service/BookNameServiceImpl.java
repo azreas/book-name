@@ -64,17 +64,11 @@ public class BookNameServiceImpl implements BookNameService {
     private String[] checkLength(int priority, List<Metadata> metadatas, MessageFormat format, int length) {
         String[] values = metadatas.stream().map(Metadata::getValue).toArray(String[]::new);
         String bookName = format.format(values);
-//        System.out.println(bookName.length());
         if (bookName.length() > length && priority <= 10) {//避免死循环， priority>10的不做修改
-            //TODO 根据具体修改规则进行修改
             for (Metadata metadata : metadatas) {
                 if (metadata.getPriority() == priority) {
-                    int titleLength = metadata.getValue().length();
-                    if (titleLength > 4) {
-                        metadata.setValue(metadata.getValue().substring(0, metadata.getValue().length() - 4));
-                    } else {
-                        metadata.setValue("");
-                    }
+                    //TODO 根据具体修改规则进行修改
+                    metadata.setValue("");
                 }
             }
             return checkLength(priority + 1, metadatas, format, length);
