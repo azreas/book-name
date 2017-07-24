@@ -145,11 +145,22 @@ public class BookNameServiceImpl implements BookNameService {
     }
 
     public void buildPreSale(Product product, ProductWrapper.Builder builder) {
-        builder.preSale(product.getPreSale());
+        Boolean preSale = product.getPreSale();
+        if (preSale) {
+            builder.preSale("预售");
+        } else {
+            builder.preSale("");
+        }
+
     }
 
     public void buildArrivalTime(Product product, ProductWrapper.Builder builder) {
-        builder.arrivalTime(product.getArrivalTime());
+        Boolean preSale = product.getPreSale();
+        if (preSale) {
+            builder.arrivalTime(product.getArrivalTime());
+        } else {
+            builder.arrivalTime("");
+        }
     }
 
     public void buildHotWord(Product product, ProductWrapper.Builder builder) {
@@ -170,5 +181,9 @@ public class BookNameServiceImpl implements BookNameService {
 
     public void buildBrand(Product product, ProductWrapper.Builder builder) {
         builder.brand(product.getBrand());
+    }
+
+    public void buildFascicle(Product product, ProductWrapper.Builder builder) {
+        builder.fascicle(product.getFascicle());
     }
 }

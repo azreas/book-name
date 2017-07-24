@@ -2,14 +2,9 @@ package xzj.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import java.util.List;
 
 /**
  * @Author xzj
@@ -27,23 +22,33 @@ public class Product {
     @Column(name = "m3")
     private String marketingClassification;
     @Column(name = "m5")
-    private String preSale;
+    private Boolean preSale;
     @Column(name = "m6")
     private String arrivalTime;
     @Column(name = "m7")
     private String author;
+    @Column(name = "m8")
+    private String fascicle;
     @Column(name = "m10")
     private String brand;
     @Column(name = "m11")
     private String version;
     @Transient
     private String recommend;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "product_rule",
-            joinColumns = @JoinColumn(name = "_product"),
-            inverseJoinColumns = @JoinColumn(name = "_rule")
-    )
-    private List<BookNameRule> bookNameRules;
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(name = "product_rule",
+//            joinColumns = @JoinColumn(name = "_product"),
+//            inverseJoinColumns = @JoinColumn(name = "_rule")
+//    )
+//    private List<BookNameRule> bookNameRules;
+
+    public String getFascicle() {
+        return fascicle;
+    }
+
+    public void setFascicle(String fascicle) {
+        this.fascicle = fascicle;
+    }
 
     public String getRecommend() {
         return recommend;
@@ -53,13 +58,13 @@ public class Product {
         this.recommend = recommend;
     }
 
-    public List<BookNameRule> getBookNameRules() {
-        return bookNameRules;
-    }
-
-    public void setBookNameRules(List<BookNameRule> bookNameRules) {
-        this.bookNameRules = bookNameRules;
-    }
+//    public List<BookNameRule> getBookNameRules() {
+//        return bookNameRules;
+//    }
+//
+//    public void setBookNameRules(List<BookNameRule> bookNameRules) {
+//        this.bookNameRules = bookNameRules;
+//    }
 
     public String getMarketingClassification() {
         return marketingClassification;
@@ -69,11 +74,11 @@ public class Product {
         this.marketingClassification = marketingClassification;
     }
 
-    public String getPreSale() {
+    public Boolean getPreSale() {
         return preSale;
     }
 
-    public void setPreSale(String preSale) {
+    public void setPreSale(Boolean preSale) {
         this.preSale = preSale;
     }
 

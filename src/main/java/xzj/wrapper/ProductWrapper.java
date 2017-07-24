@@ -1,15 +1,9 @@
 package xzj.wrapper;
 
 import xzj.model.BookNameRule;
-import xzj.model.Metadata;
 import xzj.model.Product;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author xzj
@@ -28,7 +22,7 @@ public class ProductWrapper {
     private String version;
     private String author;
     private String brand;
-
+    private String fascicle;
 
     private ProductWrapper(Builder builder) {
 //        this.product = builder.product;
@@ -43,6 +37,7 @@ public class ProductWrapper {
         this.version = builder.version;
         this.author = builder.author;
         this.brand = builder.brand;
+        this.fascicle = builder.fascicle;
     }
 
     public static Builder builder(Product product, List<BookNameRule> bookNameRules) {
@@ -51,6 +46,10 @@ public class ProductWrapper {
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    public String getFascicle() {
+        return fascicle;
     }
 
     public String getAuthor() {
@@ -93,19 +92,6 @@ public class ProductWrapper {
         return brand;
     }
 
-    public Map<String, String> getShopAndNameMap() {
-        Map<String, String> shopAndNameMap = new HashMap<>();
-        for (BookNameRule bookNameRule : bookNameRules) {
-            shopAndNameMap.put(bookNameRule.getShopId().toString(), getBookName(bookNameRule));
-        }
-        return shopAndNameMap;
-    }
-
-    private String getBookName(BookNameRule bookNameRule) {
-        MessageFormat format = new MessageFormat(bookNameRule.getRule());
-        Object[] values = bookNameRule.getMetadatas().stream().map(Metadata::getValue).toArray(String[]::new);
-        return format.format(values);
-    }
 
     @Override
     public String toString() {
@@ -136,6 +122,7 @@ public class ProductWrapper {
         private String version;
         private String author;
         private String brand;
+        private String fascicle;
 
 
         Builder() {
@@ -203,29 +190,14 @@ public class ProductWrapper {
             return this;
         }
 
+        public Builder fascicle(String fascicle) {
+            this.fascicle = fascicle;
+            return this;
+        }
+
         public ProductWrapper build() {
             return new ProductWrapper(this);
         }
 
-        private List<Metadata> convertTitle(Product product, List<Metadata> metadatas) {
-            Class<?> clazz = null;
-            Method method = null;
-            try {
-                clazz = Class.forName("xzj.model.Product");
-                for (Metadata metadata : metadatas) {
-                    method = clazz.getMethod(metadata.getExpression());
-                    metadata.setValue((String) method.invoke(product, null));
-                }
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            return metadatas;
-        }
     }
 }

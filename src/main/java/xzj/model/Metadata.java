@@ -13,7 +13,7 @@ import javax.persistence.Transient;
  * @Date 2017/7/18.
  */
 @Entity
-@Table(name = "title")
+@Table(name = "metadata")
 public class Metadata implements Comparable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
