@@ -74,15 +74,15 @@ public class BookNameRule {
     public void setMetadata(List<Metadata> metadata) {
         this.metadatas = metadata;
     }
+//
+//    public String getBookName() {
+//        MessageFormat format = new MessageFormat(rule);
+//        Object[] values = checkLength(format, 0);
+//        return format.format(values);
+//    }
 
-    public String getBookName() {
-        MessageFormat format = new MessageFormat(rule);
-        Object[] values = checkLength(format, 0);
-        return format.format(values);
-    }
 
-
-    public Object[] checkLength(MessageFormat format, int priority) {
+  /*  public Object[] checkLength(MessageFormat format, int priority) {
         Object[] values = metadatas.stream().map(Metadata::getValue).toArray(String[]::new);
         String bookName = format.format(values);
         System.out.println(bookName.length());
@@ -100,6 +100,6 @@ public class BookNameRule {
             return checkLength(format, priority + 1);
         }
         return values;
-    }
+    }*/
 
 }
