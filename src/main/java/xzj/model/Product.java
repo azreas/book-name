@@ -30,9 +30,12 @@ public class Product {
     private String preSale;
     @Column(name = "m6")
     private String arrivalTime;
-    private String m7;
-    private String m10;
-    private String m11;
+    @Column(name = "m7")
+    private String author;
+    @Column(name = "m10")
+    private String brand;
+    @Column(name = "m11")
+    private String version;
     @Transient
     private String recommend;
     @ManyToMany(fetch = FetchType.EAGER)
@@ -107,28 +110,28 @@ public class Product {
     }
 
 
-    public String getM7() {
-        return m7;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setM7(String m7) {
-        this.m7 = m7;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
-    public String getM10() {
-        return m10;
+    public String getBrand() {
+        return brand;
     }
 
-    public void setM10(String m10) {
-        this.m10 = m10;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
-    public String getM11() {
-        return m11;
+    public String getVersion() {
+        return version;
     }
 
-    public void setM11(String m11) {
-        this.m11 = m11;
+    public void setVersion(String version) {
+        this.version = version;
     }
 
 

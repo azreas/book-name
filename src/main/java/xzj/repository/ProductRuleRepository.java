@@ -7,5 +7,7 @@ import xzj.model.Metadata;
  * @Author xzj
  * @Date 2017/7/19.
  */
-public interface TitleRepository extends JpaRepository<Metadata,Long> {
+public interface ProductRuleRepository extends JpaRepository<Metadata,Long> {
+
+
 }

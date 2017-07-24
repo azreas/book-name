@@ -25,6 +25,10 @@ public class ProductWrapper {
     private String arrivalTime;
     private String hotWord;
     private String recommend;
+    private String version;
+    private String author;
+    private String brand;
+
 
     private ProductWrapper(Builder builder) {
 //        this.product = builder.product;
@@ -36,6 +40,9 @@ public class ProductWrapper {
         this.arrivalTime = builder.arrivalTime;
         this.hotWord = builder.hotWord;
         this.recommend = builder.recommend;
+        this.version = builder.version;
+        this.author = builder.author;
+        this.brand = builder.brand;
     }
 
     public static Builder builder(Product product, List<BookNameRule> bookNameRules) {
@@ -44,6 +51,10 @@ public class ProductWrapper {
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    public String getAuthor() {
+        return author;
     }
 
     public String getRecommend() {
@@ -74,6 +85,14 @@ public class ProductWrapper {
         return hotWord;
     }
 
+    public String getVersion() {
+        return version;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
     public Map<String, String> getShopAndNameMap() {
         Map<String, String> shopAndNameMap = new HashMap<>();
         for (BookNameRule bookNameRule : bookNameRules) {
@@ -91,15 +110,16 @@ public class ProductWrapper {
     @Override
     public String toString() {
         return "ProductWrapper{" +
-                "product=" + product +
-                ", bookNameRules=" + bookNameRules +
-                ", title='" + title + '\'' +
+                "title='" + title + '\'' +
                 ", subtitle='" + subtitle + '\'' +
                 ", marketingClassification='" + marketingClassification + '\'' +
                 ", preSale='" + preSale + '\'' +
                 ", arrivalTime='" + arrivalTime + '\'' +
                 ", hotWord='" + hotWord + '\'' +
                 ", recommend='" + recommend + '\'' +
+                ", version='" + version + '\'' +
+                ", author='" + author + '\'' +
+                ", brand='" + brand + '\'' +
                 '}';
     }
 
@@ -113,6 +133,10 @@ public class ProductWrapper {
         private String arrivalTime;
         private String hotWord;
         private String recommend;
+        private String version;
+        private String author;
+        private String brand;
+
 
         Builder() {
 
@@ -131,6 +155,11 @@ public class ProductWrapper {
 
         public Builder title(String title) {
             this.title = title;
+            return this;
+        }
+
+        public Builder brand(String brand) {
+            this.brand = brand;
             return this;
         }
 
@@ -154,7 +183,7 @@ public class ProductWrapper {
             return this;
         }
 
-        public Builder hotword(String hotWord) {
+        public Builder hotWord(String hotWord) {
             this.hotWord = hotWord;
             return this;
         }
@@ -164,6 +193,15 @@ public class ProductWrapper {
             return this;
         }
 
+        public Builder version(String version) {
+            this.version = version;
+            return this;
+        }
+
+        public Builder author(String author) {
+            this.author = author;
+            return this;
+        }
 
         public ProductWrapper build() {
             return new ProductWrapper(this);

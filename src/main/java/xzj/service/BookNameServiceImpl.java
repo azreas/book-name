@@ -40,7 +40,7 @@ public class BookNameServiceImpl implements BookNameService {
     @Override
     public Map<Long, String> getBookName(Long productId) {
         Product product = productRepository.findById(productId);
-        List<BookNameRule> bookNameRules = product.getBookNameRules();
+        List<BookNameRule> bookNameRules = bookNameRulesRepository.findByProductId(productId);
         Map<Long, String> shopAndNameMap = new HashMap<>();
         for (BookNameRule bookNameRule : bookNameRules) {
             ProductWrapper.Builder builder = ProductWrapper.builder();
@@ -50,8 +50,8 @@ public class BookNameServiceImpl implements BookNameService {
             Collections.sort(metadatas);
             String[] strings = checkLength(0, metadatas, format, bookNameRule.getLength());
             String bookName = convertBookName(format, strings);
-            System.out.println(productWrapper);
-            System.out.println(metadatas);
+//            System.out.println(productWrapper);
+//            System.out.println(metadatas);
             shopAndNameMap.put(bookNameRule.getShopId(), bookName);
         }
         return shopAndNameMap;
@@ -65,7 +65,7 @@ public class BookNameServiceImpl implements BookNameService {
     private String[] checkLength(int priority, List<Metadata> metadatas, MessageFormat format, int length) {
         String[] values = metadatas.stream().map(Metadata::getValue).toArray(String[]::new);
         String bookName = format.format(values);
-        System.out.println(bookName.length());
+//        System.out.println(bookName.length());
         if (bookName.length() > length && priority <= 10) {//避免死循环， priority>10的不做修改
             //TODO 根据具体修改规则进行修改
             for (Metadata metadata : metadatas) {
@@ -153,11 +153,22 @@ public class BookNameServiceImpl implements BookNameService {
     }
 
     public void buildHotWord(Product product, ProductWrapper.Builder builder) {
-        builder.hotword(recommendService.getHotWord(product.getId()));
+        builder.hotWord(recommendService.getHotWord(product.getId()));
     }
 
     public void buildRecommend(Product product, ProductWrapper.Builder builder) {
-        builder.recommend(recommendService.getRecommend(product.getId()));
+        builder.recommend(product.getRecommend());
     }
 
+    public void buildVersion(Product product, ProductWrapper.Builder builder) {
+        builder.version(product.getVersion());
+    }
+
+    public void buildAuthor(Product product, ProductWrapper.Builder builder) {
+        builder.author(product.getAuthor());
+    }
+
+    public void buildBrand(Product product, ProductWrapper.Builder builder) {
+        builder.brand(product.getBrand());
+    }
 }
