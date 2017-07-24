@@ -43,8 +43,7 @@ public class BookNameServiceImpl implements BookNameService {
         List<BookNameRule> bookNameRules = bookNameRulesRepository.findByProductId(productId);
         Map<Long, String> shopAndNameMap = new HashMap<>();
         for (BookNameRule bookNameRule : bookNameRules) {
-            ProductWrapper.Builder builder = ProductWrapper.builder();
-            ProductWrapper productWrapper = buildMetadata(builder, bookNameRule.getMetadatas(), product);
+            ProductWrapper productWrapper = buildMetadata(ProductWrapper.builder(), bookNameRule.getMetadatas(), product);
             List<Metadata> metadatas = convertMetadata(productWrapper, bookNameRule.getMetadatas());
             MessageFormat format = new MessageFormat(bookNameRule.getRule());
             Collections.sort(metadatas);
