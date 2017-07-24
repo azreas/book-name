@@ -55,7 +55,6 @@ public class BookNameServiceImpl implements BookNameService {
             shopAndNameMap.put(bookNameRule.getShopId(), bookName);
         }
         return shopAndNameMap;
-//        return null;
     }
 
     private String convertBookName(MessageFormat format, String[] values) {
