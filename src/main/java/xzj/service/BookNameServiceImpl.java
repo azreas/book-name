@@ -12,6 +12,8 @@ import xzj.wrapper.ProductWrapper;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,52 +38,72 @@ public class BookNameServiceImpl implements BookNameService {
     }
 
     @Override
-    public Map<String, String> getBookName(Long productId) {
+    public Map<Long, String> getBookName(Long productId) {
         Product product = productRepository.findById(productId);
-        //热词
-        product.setRecommend(recommendService.getRecommend(productId));
-
         List<BookNameRule> bookNameRules = product.getBookNameRules();
-//        ProductWrapper productWrapper = ProductWrapper.builder(product, bookNameRules).build();
-
-//        Map<String, String> bookNameMap = new HashMap<>();
-//        for (BookNameRule bookNameRule : bookNameRules) {
-//            convertTitle(product, bookNameRule.getMetadata());
-//            String name = titlesToName(titles, bookNameRule);
-//            String name = bookNameRule.getBookName();
-//            bookNameMap.put(bookNameRule.getShopId().toString(), name);
-//        }
-
+        Map<Long, String> shopAndNameMap = new HashMap<>();
         for (BookNameRule bookNameRule : bookNameRules) {
-            ProductWrapper.Builder builder = ProductWrapper.builder(product, bookNameRules);
-            ProductWrapper productWrapper = buildMetadata(builder, bookNameRule.getMetadata(), product);
+            ProductWrapper.Builder builder = ProductWrapper.builder();
+            ProductWrapper productWrapper = buildMetadata(builder, bookNameRule.getMetadatas(), product);
+            List<Metadata> metadatas = convertMetadata(productWrapper, bookNameRule.getMetadatas());
+            MessageFormat format = new MessageFormat(bookNameRule.getRule());
+            Collections.sort(metadatas);
+            String[] strings = checkLength(0, metadatas, format, bookNameRule.getLength());
+            String bookName = convertBookName(format, strings);
             System.out.println(productWrapper);
+            System.out.println(metadatas);
+            shopAndNameMap.put(bookNameRule.getShopId(), bookName);
         }
-//        return productWrapper.getShopAndNameMap();
-        return null;
+        return shopAndNameMap;
+//        return null;
     }
 
+    private String convertBookName(MessageFormat format, String[] values) {
+        return format.format(values);
+    }
 
-    //    private List<Metadata> convertTitle(Product product, List<Metadata> metadatas) {
-//        Class<?> clazz = null;
-//        Method method = null;
-//        try {
-//            clazz = Class.forName("xzj.model.Product");
-//            for (Metadata metadata : metadatas) {
-//                method = clazz.getMethod(metadata.getExpression());
-//                metadata.setValue((String) method.invoke(product, null));
-//            }
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (NoSuchMethodException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        } catch (InvocationTargetException e) {
-//            e.printStackTrace();
-//        }
-//        return metadatas;
-//    }
+    private String[] checkLength(int priority, List<Metadata> metadatas, MessageFormat format, int length) {
+        String[] values = metadatas.stream().map(Metadata::getValue).toArray(String[]::new);
+        String bookName = format.format(values);
+        System.out.println(bookName.length());
+        if (bookName.length() > length && priority <= 10) {//避免死循环， priority>10的不做修改
+            //TODO 根据具体修改规则进行修改
+            for (Metadata metadata : metadatas) {
+                if (metadata.getPriority() == priority) {
+                    int titleLength = metadata.getValue().length();
+                    if (titleLength > 4) {
+                        metadata.setValue(metadata.getValue().substring(0, metadata.getValue().length() - 4));
+                    } else {
+                        metadata.setValue("");
+                    }
+                }
+            }
+            return checkLength(priority + 1, metadatas, format, length);
+        }
+        return values;
+    }
+
+    private List<Metadata> convertMetadata(ProductWrapper productWrapper, List<Metadata> metadatas) {
+        Class<?> clazz = null;
+        Method method = null;
+        try {
+            clazz = Class.forName("xzj.wrapper.ProductWrapper");
+            for (Metadata metadata : metadatas) {
+                method = clazz.getMethod("get" + metadata.getExpression());
+                metadata.setValue((String) method.invoke(productWrapper, null));
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return metadatas;
+    }
+
     private ProductWrapper buildMetadata(ProductWrapper.Builder builder, List<Metadata> metadatas, Product product) {
         Class<?> clazz = null;
         Method method = null;
@@ -90,9 +112,7 @@ public class BookNameServiceImpl implements BookNameService {
             clazz = this.getClass();
             for (Metadata metadata : metadatas) {
                 method = clazz.getMethod("build" + metadata.getExpression(), Product.class, ProductWrapper.Builder.class);
-//                builder
-//                metadata.setValue((String) method.invoke(product, null));
-                method.invoke(this,  product, builder);
+                method.invoke(this, product, builder);
             }
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -116,7 +136,7 @@ public class BookNameServiceImpl implements BookNameService {
         builder.title(product.getBookName());
     }
 
-    public void buildSubTitle(Product product, ProductWrapper.Builder builder) {
+    public void buildSubtitle(Product product, ProductWrapper.Builder builder) {
         builder.subtitle(product.getSubtitle());
     }
 

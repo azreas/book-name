@@ -16,8 +16,8 @@ import java.util.Map;
  * @Date 2017/7/21.
  */
 public class ProductWrapper {
-    private final Product product;
-    private final List<BookNameRule> bookNameRules;
+    private Product product;
+    private List<BookNameRule> bookNameRules;
     private String title;
     private String subtitle;
     private String marketingClassification;
@@ -27,8 +27,8 @@ public class ProductWrapper {
     private String recommend;
 
     private ProductWrapper(Builder builder) {
-        this.product = builder.product;
-        this.bookNameRules = builder.bookNameRules;
+//        this.product = builder.product;
+//        this.bookNameRules = builder.bookNameRules;
         this.title = builder.title;
         this.subtitle = builder.subtitle;
         this.marketingClassification = builder.marketingClassification;
@@ -40,6 +40,10 @@ public class ProductWrapper {
 
     public static Builder builder(Product product, List<BookNameRule> bookNameRules) {
         return new Builder(product, bookNameRules);
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public String getRecommend() {
@@ -80,7 +84,7 @@ public class ProductWrapper {
 
     private String getBookName(BookNameRule bookNameRule) {
         MessageFormat format = new MessageFormat(bookNameRule.getRule());
-        Object[] values = bookNameRule.getMetadata().stream().map(Metadata::getValue).toArray(String[]::new);
+        Object[] values = bookNameRule.getMetadatas().stream().map(Metadata::getValue).toArray(String[]::new);
         return format.format(values);
     }
 
@@ -109,6 +113,10 @@ public class ProductWrapper {
         private String arrivalTime;
         private String hotWord;
         private String recommend;
+
+        Builder() {
+
+        }
 
         Builder(Product product, List<BookNameRule> bookNameRules) {
             if (product == null) throw new NullPointerException("product == null");

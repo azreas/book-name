@@ -11,5 +11,5 @@ import java.util.Map;
 public interface BookNameService {
     BookNameRule getBookNameRule(Long id);
 
-    Map<String, String> getBookName(Long productId);
+    Map<Long, String> getBookName(Long productId);
 }

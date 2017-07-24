@@ -48,7 +48,7 @@ public class Metadata implements Comparable {
         this.ruleId = ruleId;
     }
 
-    public String  getValue() {
+    public String getValue() {
         return value;
     }
 
@@ -99,7 +99,7 @@ public class Metadata implements Comparable {
 
     @Override
     public String toString() {
-        return name;
+        return name + " : " + value;
 
     }
 

@@ -67,7 +67,7 @@ public class BookNameRule {
     }
 
 
-    public List<Metadata> getMetadata() {
+    public List<Metadata> getMetadatas() {
         return metadatas;
     }
 

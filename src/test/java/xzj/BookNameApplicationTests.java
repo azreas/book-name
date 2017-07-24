@@ -33,7 +33,7 @@ public class BookNameApplicationTests {
 
     @Test
     public void getBookName() throws Exception {
-        Map<String, String> bookNameMap = bookNameService.getBookName(10001L);
+        Map<Long, String> bookNameMap = bookNameService.getBookName(10001L);
         System.out.println(bookNameMap);
     }
 }
